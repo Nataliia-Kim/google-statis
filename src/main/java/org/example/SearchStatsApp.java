@@ -12,7 +12,7 @@ public class SearchStatsApp {
             System.out.println("Usage: java GoogleSearchStatsApp <search_query>");
             return;
         }
-        String searchQuery = String.join(" ", args);
+        String searchQuery = args[0];
 
         Injector injector = Guice.createInjector(new BaseModule());
         SearchController searchController = injector.getInstance(SearchController.class);
