@@ -5,6 +5,7 @@ import org.example.service.SearchService;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import picocli.CommandLine;
 
 //TODO Refactor with Apache Commins CLI / Picocli
 public class SearchController {
@@ -14,8 +15,8 @@ public class SearchController {
     public SearchController(SearchService searchService) {
         this.searchService = searchService;
     }
-
-    public void getSearchStats(String query) {
+    @CommandLine.Command(name = "search")
+    public void getSearchStats(@CommandLine.Option(names = {"-q", "--query"}, description = "Search query") String query) {
 
         try {
             String encodedQuery = URLEncoder.encode(query, "UTF-8");

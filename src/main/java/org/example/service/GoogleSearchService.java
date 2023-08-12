@@ -13,9 +13,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 @Singleton
 public class GoogleSearchService implements SearchService {
+    public SearchService searchService;
     @Override
     public int getSearchResultsCount(String query) throws IOException {
         String searchUrl = "https://www.google.com/search?q=" + query;
@@ -50,9 +53,18 @@ public class GoogleSearchService implements SearchService {
             return 0;
         }
 
+        // Get the text of the element containing the statistics
         String statsText = resultStats.first().text();
-        String[] parts = statsText.split(" ");
-        String countString = parts[1].replace(",", "");
-        return Integer.parseInt(countString);
+
+        // Use regular expression to extract the count from the text
+        Pattern countPattern = Pattern.compile("([0-9,]+)\\s+results");
+        Matcher matcher = countPattern.matcher(statsText);
+
+        if (matcher.find()) {
+            String countString = matcher.group(1).replace(",", "");
+            return Integer.parseInt(countString);
+        } else {
+            return 0;
+        }
     }
 }
